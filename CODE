@@ -1,0 +1,85 @@
+HTML (index.html)
+
+Copy
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stopwatch</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="stopwatch">
+    <h1>Stopwatch</h1>
+    <div id="display">00:00:00</div>
+    <button onclick="startStop()" id="startStopButton">Start</button>
+    <button onclick="reset()">Reset</button>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
+
+CSS (styles.css)
+
+Copy
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4;
+  font-family: Arial, sans-serif;
+  margin: 0;
+}
+
+.stopwatch {
+  text-align: center;
+}
+
+#display {
+  font-size: 48px;
+  margin: 20px 0;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+JavaScript (script.js)
+
+Copy
+let startTime;
+let elapsedTime = 0;
+let timerInterval;
+
+function formatTime(milliseconds) {
+  const hours = Math.floor(milliseconds / 3600000);
+  const minutes = Math.floor((milliseconds % 3600000) / 60000);
+  const seconds = Math.floor((milliseconds % 60000) / 1000);
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+}
+
+function startStop() {
+  if (document.getElementById("startStopButton").textContent === "Start") {
+    startTime = Date.now() - elapsedTime;
+    timerInterval = setInterval(() => {
+      elapsedTime = Date.now() - startTime;
+      document.getElementById("display").textContent = formatTime(elapsedTime);
+    }, 10);
+    document.getElementById("startStopButton").textContent = "Stop";
+  } else {
+    clearInterval(timerInterval);
+    document.getElementById("startStopButton").textContent = "Start";
+  }
+}
+
+function reset() {
+  clearInterval(timerInterval);
+  elapsedTime = 0;
+  document.getElementById("display").textContent = "00:00:00";
+  document.getElementById("startStopButton").textContent = "Start";
+}
